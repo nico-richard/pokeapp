@@ -73,12 +73,26 @@ function Pokemon({ pokemon }) {
         border: "1px solid black",
         margin: "10px",
         borderRadius: "5px",
-        backgroundColor: "#eee",
+        backgroundColor: "#ffe",
       }}
     >
-      <div style={{ margin: "5px" }}>{pokemon.name}</div>
-      <div style={{ color: "red" }}>{pokemon.stats.HP}</div>
-      <img src={pokemon.sprite} alt={`${pokemon.name}`} />
+      <div style={{ margin: "2px" }}>{pokemon.name}</div>
+      <div
+        style={{
+          color: "white",
+          border: "1px solid black",
+          backgroundColor: "red",
+          borderRadius: "5px",
+          padding: "2px",
+        }}
+      >
+        {pokemon.stats.HP}
+      </div>
+      <img
+        style={{ margin: "2px" }}
+        src={pokemon.sprite}
+        alt={`${pokemon.name}`}
+      />
     </div>
   );
 }
