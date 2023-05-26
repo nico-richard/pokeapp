@@ -1,30 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import PokeList from "./PokeList";
+import UserInput from "./UserInput";
+import "./App.sass"
 
-function App() {
-  const [numberOfItems, setNumberOfItems] = useState();
-
-  function handleNumberOfItems(count) {
-    setNumberOfItems(count);
-  }
-
-  return (
-    <div className="app">
-      <UserInput onNumberOfItems={handleNumberOfItems} />
-      {numberOfItems > 0 ? (
-        <PokeList numberOfItems={numberOfItems} />
-      ) : (
-        <h3>No pokemon found</h3>
-      )}
-    </div>
-  );
-}
-
-export default App;
-
-function PokeList({ numberOfItems }) {
+export default function App() {
   const [pokeData, setPokeData] = useState([]);
 
-  function getRandomPokemons() {
+  function getRandomPokemons(numberOfItems) {
     let randomList = [];
 
     fetch(`https://pokebuildapi.fr/api/v1/pokemon`)
@@ -38,78 +20,18 @@ function PokeList({ numberOfItems }) {
       });
   }
 
-  useEffect(() => {
-    getRandomPokemons();
-    // eslint-disable-next-line
-  }, [numberOfItems]);
-
-  const pokeList = pokeData.map((pokemon) => {
-    return <Pokemon pokemon={pokemon} />;
-  });
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-      }}
-      className="pokelist"
-    >
-      {pokeList}
-    </div>
-  );
-}
-
-function Pokemon({ pokemon }) {
-  return (
-    <div
-      key={pokemon.id}
-      className="pokemon"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        listStyleType: "none",
-        border: "1px solid black",
-        margin: "10px",
-        borderRadius: "5px",
-        backgroundColor: "#ffe",
-      }}
-    >
-      <div style={{ margin: "2px" }}>{pokemon.name}</div>
-      <div
-        style={{
-          color: "white",
-          border: "1px solid black",
-          backgroundColor: "red",
-          borderRadius: "5px",
-          padding: "2px",
-        }}
-      >
-        {pokemon.stats.HP}
-      </div>
-      <img
-        style={{ margin: "2px" }}
-        src={pokemon.sprite}
-        alt={`${pokemon.name}`}
-      />
-    </div>
-  );
-}
-
-function UserInput({ onNumberOfItems }) {
-  const [number, setNumber] = useState();
-
-  function handleClick() {
-    onNumberOfItems(number);
+  function generatePokemons(numberOfItems) {
+    getRandomPokemons(numberOfItems)
   }
 
   return (
-    <div className="user-input">
-      <input type="number" onChange={(e) => setNumber(e.target.value)}></input>
-      <button type="submit" onClick={handleClick}>
-        Get {number} pokemons
-      </button>
+    <div className="app">
+      <UserInput generatePokemons={generatePokemons} />
+      {(pokeData.length > 0) ? (
+        <PokeList pokeData={pokeData} />
+      ) : (
+        <h3>No pokemon found</h3>
+      )}
     </div>
   );
 }
